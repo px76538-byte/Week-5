@@ -1,0 +1,148 @@
+#include <iostream>
+#include <vector>
+#include <functional>
+#include <cassert>
+#include <string>
+#include <utility>
+
+using namespace std;
+
+// Creates a vector containing 10 values:
+// elem, elem + 1, elem + 2, ..., elem + 9
+template <typename T>
+vector<T> vec_fill(T elem) {
+    vector<T> result;
+
+    for (int i = 0; i < 10; i++) {
+        result.push_back(elem + i);
+    }
+
+    return result;
+}
+
+// Repeatedly applies func until predicate returns true
+template <typename T>
+T until(T elem, function<T(T)> func, function<bool(T)> predicate) {
+    while (!predicate(elem)) {
+        elem = func(elem);
+    }
+
+    return elem;
+}
+
+// Arranges the values from largest to smallest
+template <typename T>
+void order(T& a, T& b, T& c) {
+    if (a < b) {
+        swap(a, b);
+    }
+
+    if (a < c) {
+        swap(a, c);
+    }
+
+    if (b < c) {
+        swap(b, c);
+    }
+}
+
+int main() {
+    // -------------------------------------------------
+    // vec_fill tests using int, double, and char
+    // -------------------------------------------------
+
+    vector<int> intVector = vec_fill<int>(5);
+
+    assert((intVector ==
+            vector<int>{5, 6, 7, 8, 9, 10, 11, 12, 13, 14}));
+
+    vector<double> doubleVector = vec_fill<double>(1.5);
+
+    assert((doubleVector ==
+            vector<double>{1.5, 2.5, 3.5, 4.5, 5.5,
+                           6.5, 7.5, 8.5, 9.5, 10.5}));
+
+    vector<char> charVector = vec_fill<char>('a');
+
+    assert((charVector ==
+            vector<char>{'a', 'b', 'c', 'd', 'e',
+                         'f', 'g', 'h', 'i', 'j'}));
+
+    // -------------------------------------------------
+    // until tests using int, double, and string
+    // -------------------------------------------------
+
+    int intResult = until<int>(
+        1,
+        [](int value) {
+            return value * 2;
+        },
+        [](int value) {
+            return value > 100;
+        }
+    );
+
+    assert(intResult == 128);
+
+    double doubleResult = until<double>(
+        1.0,
+        [](double value) {
+            return value + 0.5;
+        },
+        [](double value) {
+            return value >= 3.0;
+        }
+    );
+
+    assert(doubleResult == 3.0);
+
+    string stringResult = until<string>(
+        "a",
+        [](string value) {
+            return value + "a";
+        },
+        [](string value) {
+            return value.length() >= 4;
+        }
+    );
+
+    assert(stringResult == "aaaa");
+
+    // -------------------------------------------------
+    // order tests using int, double, and string
+    // -------------------------------------------------
+
+    int intA = 4;
+    int intB = 10;
+    int intC = 7;
+
+    order(intA, intB, intC);
+
+    assert(intA == 10);
+    assert(intB == 7);
+    assert(intC == 4);
+
+    double doubleA = 2.5;
+    double doubleB = 1.5;
+    double doubleC = 4.5;
+
+    order(doubleA, doubleB, doubleC);
+
+    assert(doubleA == 4.5);
+    assert(doubleB == 2.5);
+    assert(doubleC == 1.5);
+
+    string stringA = "banana";
+    string stringB = "apple";
+    string stringC = "orange";
+
+    order(stringA, stringB, stringC);
+
+    assert(stringA == "orange");
+    assert(stringB == "banana");
+    assert(stringC == "apple");
+
+    cout << "All tests passed!" << endl;
+
+    return 0;
+}
