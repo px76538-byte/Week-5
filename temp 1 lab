@@ -1,0 +1,56 @@
+#include <iostream>
+#include <string>
+
+template <typename T>
+T max_two(T first, T second) {
+    if (first > second) {
+        return first;
+    }
+
+    return second;
+}
+
+template <typename T>
+T max_three(T first, T second, T third) {
+    return max_two(max_two(first, second), third);
+}
+
+template <typename T>
+void swap(T& first, T& second) {
+    T temporary = first;
+    first = second;
+    second = temporary;
+}
+
+int main() {
+    int num1 = 10;
+    int num2 = 20;
+    int num3 = 15;
+
+    std::cout << "Largest of two numbers: "
+              << max_two(num1, num2) << std::endl;
+
+    std::cout << "Largest of three numbers: "
+              << max_three(num1, num2, num3) << std::endl;
+
+    std::cout << "Before swap: "
+              << num1 << " " << num2 << std::endl;
+
+    swap(num1, num2);
+
+    std::cout << "After swap: "
+              << num1 << " " << num2 << std::endl;
+
+    std::string word1 = "apple";
+    std::string word2 = "banana";
+
+    std::cout << "Largest word: "
+              << max_two(word1, word2) << std::endl;
+
+    swap(word1, word2);
+
+    std::cout << "After swapping words: "
+              << word1 << " " << word2 << std::endl;
+
+    return 0;
+}
