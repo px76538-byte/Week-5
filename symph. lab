@@ -1,0 +1,126 @@
+#include <iostream>
+#include <vector>
+#include <memory>
+#include <string>
+
+using namespace std;
+
+// Base class
+class instrument {
+protected:
+    string name;
+    string sound;
+
+    void repeatSound(int repetitions) const {
+        cout << name << ": ";
+
+        for (int i = 0; i < repetitions; i++) {
+            cout << sound;
+
+            if (i < repetitions - 1) {
+                cout << " ";
+            }
+        }
+
+        cout << endl;
+    }
+
+public:
+    instrument(string instrumentName, string instrumentSound) {
+        name = instrumentName;
+        sound = instrumentSound;
+    }
+
+    virtual void play() const {
+        cout << name << ": " << sound << endl;
+    }
+
+    virtual ~instrument() = default;
+};
+
+// Derived class 1
+class trumpet : public instrument {
+public:
+    trumpet() : instrument("Trumpet", "doot") {
+    }
+
+    void play() const override {
+        repeatSound(3);
+    }
+};
+
+// Derived class 2
+class violin : public instrument {
+public:
+    violin() : instrument("Violin", "vwa") {
+    }
+
+    void play() const override {
+        repeatSound(5);
+    }
+};
+
+// Derived class 3
+class piano : public instrument {
+public:
+    piano() : instrument("Piano", "dee") {
+    }
+
+    void play() const override {
+        repeatSound(2);
+    }
+};
+
+// Derived class 4
+class trombone : public instrument {
+public:
+    trombone() : instrument("Trombone", "Dwooooo~") {
+    }
+
+    void play() const override {
+        repeatSound(1);
+    }
+};
+
+// Derived class 5
+class singer : public instrument {
+public:
+    singer() : instrument("Singer", "blah") {
+    }
+
+    void play() const override {
+        repeatSound(6);
+    }
+};
+
+// Orchestra class
+class orchestra {
+private:
+    vector<unique_ptr<instrument>> instruments;
+
+public:
+    void addInstrument(unique_ptr<instrument> newInstrument) {
+        instruments.push_back(move(newInstrument));
+    }
+
+    void play() const {
+        for (const auto& currentInstrument : instruments) {
+            currentInstrument->play();
+        }
+    }
+};
+
+int main() {
+    orchestra myOrchestra;
+
+    myOrchestra.addInstrument(make_unique<trumpet>());
+    myOrchestra.addInstrument(make_unique<violin>());
+    myOrchestra.addInstrument(make_unique<piano>());
+    myOrchestra.addInstrument(make_unique<trombone>());
+    myOrchestra.addInstrument(make_unique<trumpet>());
+    myOrchestra.addInstrument(make_unique<singer>());
+
+    myOrchestra.play();
+
+    return 0;
+}
